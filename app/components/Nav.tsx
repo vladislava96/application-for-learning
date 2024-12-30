@@ -14,23 +14,15 @@ export const Nav = () => {
         className={`${styles.link} ${pathname === "/" ? styles.active : ""}`}
         href="/"
       >
-        Home
+        Главная
       </Link>
       <Link
         className={`${styles.link} ${
-          pathname === "/verify" ? styles.active : ""
+          pathname === "/auth" ? styles.active : ""
         }`}
-        href="/verify"
+        href="/auth"
       >
-        Verify
-      </Link>
-      <Link
-        className={`${styles.link} ${
-          pathname === "/quotes" ? styles.active : ""
-        }`}
-        href="/quotes"
-      >
-        Quotes
+        Регистрация нового пользователя
       </Link>
     </nav>
   );
