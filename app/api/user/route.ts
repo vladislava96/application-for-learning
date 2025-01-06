@@ -1,34 +1,37 @@
 import { SignupFormSchema } from "@/lib/definitions";
 import { Prisma, PrismaClient } from "@prisma/client";
-import type { NextRequest } from "next/server";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
+import bcrypt from "bcrypt";
 
 const prisma = new PrismaClient();
 
 export async function POST(request: NextRequest) {
   const user = await request.json();
-  const validationResult = SignupFormSchema.safeParse({ email: user.email, password: user.password, name: user.name })
+  const validationResult = SignupFormSchema.safeParse({ email: user.email, password: user.password, name: user.name });
+
   if(!validationResult.success) {
     const result = validationResult.error?.format();
+    let message = '';
+
     if(result?.email?._errors) {
-      const errorMessage = result?.email._errors.join();
-      return NextResponse.json({message: errorMessage, error: result}, {status: 422})
+      message += result?.email._errors.join();
     }
     if(result?.password?._errors) {
-      const errorMessage = result?.password._errors.join();
-      return NextResponse.json({message: errorMessage, error: result}, {status: 422})
+      message += result?.password._errors.join();
     }
     if(result?.name?._errors) {
-      const errorMessage = result?.name._errors.join();
-      return NextResponse.json({message: errorMessage, error: result}, {status: 422})
+      message += result?.name._errors.join();
     }
-    return NextResponse.json({message: 'Ошибка валидации', error: result}, {status: 422})
-  }
+
+    return NextResponse.json({message}, {status: 422})
+  };
+
+  const hashPassword = bcrypt.hashSync(user.password, 5646 )
   try {
     const result = await prisma.user.create({
       data: {
         email: user.email,
-        password: user.password,
+        password: hashPassword,
         name: user.name
       },
     })
