@@ -1,7 +1,7 @@
 import { createAppSlice } from "@/lib/createAppSlice";
 import type { AppThunk } from "@/lib/store";
 import { createAsyncThunk, type PayloadAction } from "@reduxjs/toolkit";
-import { fetchUser, ValidationError } from "./userAPI";
+import { fetchUser } from "./userAPI";
 
 export interface UserModel {
   email: string;
@@ -38,22 +38,18 @@ export const SignupFormSlice = createAppSlice({
     createUserAsync: create.asyncThunk(
       async (user: UserModel) => {
         const response = await fetchUser(user);
-        console.log('in thunk')
-        console.log(response)
         return response;
       },
       {
         pending: (state) => {
-          console.log("loading")
           state.status = "loading";
         },
         fulfilled: (state, action) => {
-          console.log("idle")
           state.status = "idle";
+          console.log(state.status);
           state.value += action.payload;
         },
         rejected: (state, action) => {
-          console.log("failed2", action.error.message)
           state.status = "failed";
           state.serverValidationError = action.error.message;
         },

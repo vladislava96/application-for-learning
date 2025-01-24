@@ -1,9 +1,10 @@
 import type { Action, ThunkAction } from "@reduxjs/toolkit";
 import { combineSlices, configureStore } from "@reduxjs/toolkit";
 import { SignupFormSlice } from "./features/signup-form/signupFormSlice";
+import { LoginFormSlice } from "./features/login-form/loginFormSlice";
 
 
-const rootReducer = combineSlices(SignupFormSlice);
+const rootReducer = combineSlices(SignupFormSlice, LoginFormSlice);
 
 export type RootState = ReturnType<typeof rootReducer>;
 

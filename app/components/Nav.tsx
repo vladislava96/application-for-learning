@@ -24,6 +24,14 @@ export const Nav = () => {
       >
         Регистрация
       </Link>
+      <Link
+        className={`${styles.link} ${
+          pathname === "/login" ? styles.active : ""
+        }`}
+        href="/login"
+      >
+        Вход
+      </Link>
     </nav>
   );
 };
