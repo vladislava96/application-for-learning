@@ -1,7 +1,7 @@
 'use client'
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { FormEvent, useState } from "react";
-import { createUserAsync, selectServerValidationError, UserModel } from "@/lib/features/signup-form/signupFormSlice";
+import { createUserAsync, selectServerValidationError, selectSignupStatus, UserModel } from "@/lib/features/signup-form/signupFormSlice";
 import { SignupFormSchema } from '../../../lib/definitions';
 import { ZodFormattedError } from "zod/lib/ZodError";
 
@@ -13,6 +13,7 @@ export const SignupForm = () => {
   const [validationResults, setValidationResults] = useState<ZodFormattedError<UserModel>>();
   const dispatch = useAppDispatch();
   const serverValidationError = useAppSelector(selectServerValidationError);
+  const signupStatus = useAppSelector(selectSignupStatus);
 
   function submitUserData(e: FormEvent) {
     e.preventDefault();
@@ -59,6 +60,7 @@ export const SignupForm = () => {
       </div>
       <button type="submit">Зарегистрироваться</button>
       {serverValidationError && <ul>{serverValidationError.split(",").map((errorMessage, index) => <li key={index}>{errorMessage}</li>)}</ul>}
+      {signupStatus === "idle" && <p>Регистрация прошла успешно</p>}
   </form>
   )
 }

@@ -12,7 +12,7 @@ export interface UserModel {
 export interface SignupFormSliceState {
   userData: UserModel;
   value: UserModel;
-  status: "idle" | "loading" | "failed";
+  status: "idle" | "loading" | "failed" | "";
   serverValidationError: string | undefined,
 }
 
@@ -27,7 +27,7 @@ const initialState: SignupFormSliceState = {
     password: '',
     name: ''
   },
-  status: "idle",
+  status: "",
   serverValidationError: ""
 };
 
@@ -46,8 +46,8 @@ export const SignupFormSlice = createAppSlice({
         },
         fulfilled: (state, action) => {
           state.status = "idle";
-          console.log(state.status);
           state.value += action.payload;
+          console.log(state.value);
         },
         rejected: (state, action) => {
           state.status = "failed";
@@ -57,10 +57,11 @@ export const SignupFormSlice = createAppSlice({
     ),
   }),
   selectors: {
-    selectServerValidationError: (signupForm) => signupForm.serverValidationError
+    selectServerValidationError: (signupForm) => signupForm.serverValidationError,
+    selectSignupStatus: (signupForm) => signupForm.status,
   }
 });
 
 export const { createUserAsync } = SignupFormSlice.actions;
 
-export const { selectServerValidationError } = SignupFormSlice.selectors;
+export const { selectServerValidationError, selectSignupStatus } = SignupFormSlice.selectors;
