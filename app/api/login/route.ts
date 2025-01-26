@@ -1,6 +1,7 @@
 import { Prisma, PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcrypt";
+import { createSession } from "@/lib/session";
 
 const prisma = new PrismaClient();
 
@@ -21,7 +22,8 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
-    return NextResponse.json({ data: loginData });
+    await createSession(loginData.id);
+    return NextResponse.json({ message: "Вход выполнен" });
   } catch (e) {
     if (e instanceof Prisma.PrismaClientKnownRequestError) {
       return NextResponse.json(

@@ -7,6 +7,7 @@ export const fetchLogin = async (loginData: LoginModel) => {
     body: JSON.stringify(loginData),
   });
   const result = await response.json();
+  console.log(result);
   if (response.ok) {
     return result;
   } else {
