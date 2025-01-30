@@ -1,6 +1,7 @@
 import 'server-only'
 import { SignJWT, jwtVerify } from 'jose'
 import { cookies } from 'next/headers'
+import { redirect } from 'next/navigation'
 
 export type SessionPayload = {
   userId: number
@@ -60,4 +61,9 @@ export async function updateSession() {
     sameSite: 'lax',
     path: '/',
   })
+}
+ 
+export async function deleteSession() {
+  const cookieStore = await cookies()
+  cookieStore.delete('session')
 }

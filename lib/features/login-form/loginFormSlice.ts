@@ -1,5 +1,6 @@
 import { createAppSlice } from "@/lib/createAppSlice";
-import { fetchLogin } from "./loginAPI";
+import { fetchLogin, fetchLogout } from "./loginAPI";
+import { redirect } from "next/navigation";
 
 export interface LoginModel {
   email: string;
@@ -41,11 +42,19 @@ export const LoginFormSlice = createAppSlice({
         fulfilled: (state, action) => {
           state.status = "idle";
           state.responseValue += action.payload;
+          redirect("/profile");
         },
         rejected: (state, action) => {
           state.status = "failed";
           state.serverError = action.error.message;
         },
+      },
+    ),
+    logoutAsync: create.asyncThunk(
+      async () => {
+        const response = await fetchLogout();
+        console.log(response);
+        return response;
       },
     ),
   }),
@@ -55,6 +64,6 @@ export const LoginFormSlice = createAppSlice({
   }
 });
 
-export const { loginAsync } = LoginFormSlice.actions;
+export const { loginAsync, logoutAsync } = LoginFormSlice.actions;
 
 export const { selectServerError, selectLoginStatus } = LoginFormSlice.selectors;
